@@ -1,0 +1,399 @@
+* Startup Allocation *
+buddy system: usable memory region: 0x0 ~ 0x3C000000
+Reserved Memory: start 0x0 ~ end 0x1000
+    [!] Reserved page in 0x0 - 0x1000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         1         1         1         1         1      3839 |
+        Remove usable block for reserved memory: order 0
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         1         1         1         1         1         1      3839 |
+Reserved Memory: start 0x8200000 ~ end 0x8215000
+    [!] Reserved page in 0x8200000 - 0x8210000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         1         1         1         1         3         2      3838 |
+        Remove usable block for reserved memory: order 4
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         1         1         1         1         2         2      3838 |
+    [!] Reserved page in 0x8210000 - 0x8214000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         1         1         3         2         1         2      3838 |
+        Remove usable block for reserved memory: order 2
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         1         1         2         2         1         2      3838 |
+    [!] Reserved page in 0x8214000 - 0x8215000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         3         2         1         2         1         2      3838 |
+        Remove usable block for reserved memory: order 0
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         2      3838 |
+Reserved Memory: start 0x80000 ~ end 0x889000
+    [!] Reserved page in 0x840000 - 0x880000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3837 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3836 |
+    [!] Reserved page in 0x800000 - 0x840000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3836 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3835 |
+    [!] Reserved page in 0x7C0000 - 0x800000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3835 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3834 |
+    [!] Reserved page in 0x780000 - 0x7C0000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3834 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3833 |
+    [!] Reserved page in 0x740000 - 0x780000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3833 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3832 |
+    [!] Reserved page in 0x700000 - 0x740000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3832 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3831 |
+    [!] Reserved page in 0x6C0000 - 0x700000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3831 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3830 |
+    [!] Reserved page in 0x680000 - 0x6C0000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3830 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3829 |
+    [!] Reserved page in 0x640000 - 0x680000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3829 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3828 |
+    [!] Reserved page in 0x600000 - 0x640000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3828 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3827 |
+    [!] Reserved page in 0x5C0000 - 0x600000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3827 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3826 |
+    [!] Reserved page in 0x580000 - 0x5C0000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3826 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3825 |
+    [!] Reserved page in 0x540000 - 0x580000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3825 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3824 |
+    [!] Reserved page in 0x500000 - 0x540000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3824 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3823 |
+    [!] Reserved page in 0x4C0000 - 0x500000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3823 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3822 |
+    [!] Reserved page in 0x480000 - 0x4C0000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3822 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3821 |
+    [!] Reserved page in 0x440000 - 0x480000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3821 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3820 |
+    [!] Reserved page in 0x400000 - 0x440000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3820 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3819 |
+    [!] Reserved page in 0x3C0000 - 0x400000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3819 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3818 |
+    [!] Reserved page in 0x380000 - 0x3C0000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3818 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3817 |
+    [!] Reserved page in 0x340000 - 0x380000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3817 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3816 |
+    [!] Reserved page in 0x300000 - 0x340000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3816 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3815 |
+    [!] Reserved page in 0x2C0000 - 0x300000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3815 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3814 |
+    [!] Reserved page in 0x280000 - 0x2C0000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3814 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3813 |
+    [!] Reserved page in 0x240000 - 0x280000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3813 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3812 |
+    [!] Reserved page in 0x200000 - 0x240000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3812 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3811 |
+    [!] Reserved page in 0x1C0000 - 0x200000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3811 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3810 |
+    [!] Reserved page in 0x180000 - 0x1C0000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3810 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3809 |
+    [!] Reserved page in 0x140000 - 0x180000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3809 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3808 |
+    [!] Reserved page in 0x100000 - 0x140000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3808 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3807 |
+    [!] Reserved page in 0xC0000 - 0x100000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3807 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3806 |
+    [!] Reserved page in 0x80000 - 0xC0000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3806 |
+        Remove usable block for reserved memory: order 6
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         2         1         4      3805 |
+    [!] Reserved page in 0x880000 - 0x888000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         4         2         3      3805 |
+        Remove usable block for reserved memory: order 3
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         2         2         1         3         2         3      3805 |
+    [!] Reserved page in 0x888000 - 0x889000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         4         3         2         2         2         3      3805 |
+        Remove usable block for reserved memory: order 0
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         3         3         2         2         2         3      3805 |
+Reserved Memory: start 0x88000 ~ end 0x889000
+Reserved Memory: start 0x8000000 ~ end 0x8001000
+    [!] Reserved page in 0x8000000 - 0x8001000
+        Before
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         5         4         3         3         3         4      3804 |
+        Remove usable block for reserved memory: order 0
+        After
+        ----------------- [  Number of Available Page Blocks  ] -----------------
+        |    4KB(0)    8KB(1)   16KB(2)   32KB(3)   64KB(4)  128KB(5)  256KB(6) |
+        |         4         4         3         3         3         4      3804 |
+
+
