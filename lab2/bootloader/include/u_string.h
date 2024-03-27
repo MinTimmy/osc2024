@@ -12,7 +12,7 @@ int                strncmp(const char*, const char*, unsigned long long);
 char*              memcpy(void *dest, const void *src, unsigned long long len);
 char*              strcpy(char *dest, const char *src);
 
-int str_SepbySpace(char* head, char* words[]);
+char* str_SepbySpace(char* head);
 int   atoi(char* str);
 
 #endif /* _U_STRING_H_ */

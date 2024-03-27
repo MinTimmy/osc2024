@@ -5,6 +5,12 @@
 .global _start
 
 _start:
+    mrs x1, mpidr_el1
+    and x1, x1, #0xff
+    cbz x1, master
+    b proc_hang
+
+master:
     bl from_el2_to_el1
 
 set_exception_vector_table:

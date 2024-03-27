@@ -22,16 +22,16 @@ void el1h_irq_router(){
     if(*IRQ_PENDING_1 & IRQ_PENDING_1_AUX_INT && *CORE0_INTERRUPT_SOURCE & INTERRUPT_SOURCE_GPU) // from aux && from GPU0 -> uart exception
     {
         // It is for terminal output. (Like printf function in C)
-        if (*AUX_MU_IIR_REG & (1 << 1))
+        if (*AUX_MU_IER_REG & (1 << 1))
         {
-            *AUX_MU_IER_REG &= ~(2);  // disable write interrupt
+            *AUX_MU_IIR_REG &= ~(2);  // disable write interrupt
             irqtask_add(uart_w_irq_handler, UART_IRQ_PRIORITY);
             irqtask_run_preemptive(); // run the queued task before returning to the program.
         }
         // It is for terminal input. (Like scanf function in C)
-        else if (*AUX_MU_IIR_REG & (2 << 1))
+        else if (*AUX_MU_IER_REG & (2 << 1))
         {
-            *AUX_MU_IER_REG &= ~(1);  // disable read interrupt
+            *AUX_MU_IIR_REG &= ~(1);  // disable read interrupt
             irqtask_add(uart_r_irq_handler, UART_IRQ_PRIORITY);
             irqtask_run_preemptive();
         }
@@ -62,15 +62,15 @@ void el0_irq_64_router(){
     // (2) https://datasheets.raspberrypi.com/bcm2836/bcm2836-peripherals.pdf - Pg.16
     if(*IRQ_PENDING_1 & IRQ_PENDING_1_AUX_INT && *CORE0_INTERRUPT_SOURCE & INTERRUPT_SOURCE_GPU) // from aux && from GPU0 -> uart exception
     {
-        if (*AUX_MU_IIR_REG & (0b01 << 1))
+        if (*AUX_MU_IER_REG & (0b01 << 1))
         {
-            *AUX_MU_IER_REG &= ~(2);  // disable write interrupt
+            *AUX_MU_IIR_REG &= ~(2);  // disable write interrupt
             irqtask_add(uart_w_irq_handler, UART_IRQ_PRIORITY);
             irqtask_run_preemptive();
         }
-        else if (*AUX_MU_IIR_REG & (0b10 << 1))
+        else if (*AUX_MU_IER_REG & (0b10 << 1))
         {
-            *AUX_MU_IER_REG &= ~(1);  // disable read interrupt
+            *AUX_MU_IIR_REG &= ~(1);  // disable read interrupt
             irqtask_add(uart_r_irq_handler, UART_IRQ_PRIORITY);
             irqtask_run_preemptive();
         }

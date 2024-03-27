@@ -1,7 +1,7 @@
 #include "bcm2837/rpi_gpio.h"
 #include "bcm2837/rpi_uart1.h"
 #include "uart1.h"
-#include "utils.h"
+#include "u_string.h"
 
 void uart_init()
 {

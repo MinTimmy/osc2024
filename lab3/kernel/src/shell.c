@@ -9,26 +9,33 @@
 #include "heap.h"
 #include "timer.h"
 
-#define CLI_MAX_CMD 11
-#define USTACK_SIZE 0x10000
+// #define CLI_MAX_CMD 12
+#define USTACK_SIZE 0x10000   // the size of user stack
 
 extern char* dtb_ptr;
 void* CPIO_DEFAULT_PLACE;
-
-struct CLI_CMDS cmd_list[CLI_MAX_CMD]=
+int cmd_list_size = 0;
+// struct CLI_CMDS cmd_list[CLI_MAX_CMD]=
+struct CLI_CMDS cmd_list[] =
 {
-    {.command="cat", .help="concatenate files and print on the standard output"},
-    {.command="dtb", .help="show device tree"},
-    {.command="exec", .help="execute a command, replacing current image with a new image"},
-    {.command="hello", .help="print Hello World!"},
-    {.command="help", .help="print all available commands"},
-    {.command="kmalloc", .help="simple allocator in heap session"},
-    {.command="info", .help="get device information via mailbox"},
-    {.command="ls", .help="list directory contents"},
-    {.command="setTimeout", .help="setTimeout [MESSAGE] [SECONDS]"},
-    {.command="set2sAlert", .help="set core timer interrupt every 2 second"},
-    {.command="reboot", .help="reboot the device"}
+    {.command="help",       .func=do_cmd_help,          .help="print all available commands"},
+    {.command="exec",       .func=do_cmd_exec,          .help="execute a command, replacing current image with a new image"},
+    {.command="setTimeout", .func=do_cmd_setTimeout,    .help="setTimeout [MESSAGE] [SECONDS]"},
+    {.command="set2sAlert", .func=do_cmd_set2sAlert,    .help="set core timer interrupt every 2 second"},
+    {.command="cat",        .func=do_cmd_cat,           .help="concatenate files and print on the standard output"},
+    {.command="dtb",        .func=do_cmd_dtb,           .help="show device tree"},
+    {.command="info",       .func=do_cmd_info,          .help="get device information via mailbox"},
+    {.command="kmalloc",    .func=do_cmd_kmalloc,       .help="simple allocator in heap session"},
+    {.command="ls",         .func=do_cmd_ls,            .help="list directory contents"},
+    {.command="hello",      .func=do_cmd_hello,         .help="print Hello World!"},
+    {.command="reboot",     .func=do_cmd_reboot,        .help="reboot the device"},
+    {.command="c",          .func=do_cmd_cancel_reboot, .help="cancel reboot the device"}
 };
+
+void cli_cmd_init()
+{
+    cmd_list_size = sizeof(cmd_list) / sizeof(struct CLI_CMDS);
+}
 
 void cli_cmd_clear(char* buffer, int length)
 {
@@ -40,14 +47,62 @@ void cli_cmd_clear(char* buffer, int length)
 
 void cli_cmd_read(char* buffer)
 {
-    char c='\0';
+    char c = '\0';
     int idx = 0;
     while(1)
     {
         if ( idx >= CMD_MAX_LEN ) break;
+
         c = uart_async_getc();
-        if ( c == '\n') break;
+
+        // if user key 'enter'
+        if ( c == '\n')
+        {
+            uart_puts("\r\n");
+            buffer[idx] = '\0';
+            break;
+        }
+
+        // if user key 'backspace'
+        if ( c == '\b' || c == 127 )
+        {
+            if ( idx > 0 )
+            {
+                uart_puts("\b \b");
+                idx--;
+                buffer[idx] = '\0';
+            }
+            continue;
+        }
+
+        // use tab to auto complete
+        if ( c == '\t' )
+        {
+            for(int tab_index = 0; tab_index < cmd_list_size; tab_index++)
+            {
+                if (strncmp(buffer, cmd_list[tab_index].command, strlen(buffer)) == 0)
+                {
+                    for (int j = 0; j < strlen(buffer); j++)
+                    {
+                        uart_puts("\b \b");
+                    }
+                    uart_puts(cmd_list[tab_index].command);
+                    cli_cmd_clear(buffer, strlen(buffer) + 3);
+                    strcpy(buffer, cmd_list[tab_index].command);
+                    idx = strlen(buffer);
+                    break;
+                }
+            }
+            continue;
+        }
+
+        // some ascii blacklist
+        if ( c > 16 && c < 32 ) continue;
+        if ( c > 127 ) continue;
+
         buffer[idx++] = c;
+        // uart_send(c); // we don't need this anymore
+
     }
 }
 
@@ -55,32 +110,26 @@ void cli_cmd_exec(char* buffer)
 {
     if (!buffer) return;
 
-    char* cmd = buffer;
-    char* argvs = str_SepbySpace(buffer);
+    char *words[3] = {NULL, NULL, NULL};
+    int argc = str_SepbySpace(buffer, words) - 1;
 
-    if (strcmp(cmd, "cat") == 0) {
-        do_cmd_cat(argvs);
-    } else if (strcmp(cmd, "dtb") == 0){
-        do_cmd_dtb();
-    } else if (strcmp(cmd, "exec") == 0){
-        do_cmd_exec(argvs);
-    } else if (strcmp(cmd, "hello") == 0) {
-        do_cmd_hello();
-    } else if (strcmp(cmd, "help") == 0) {
-        do_cmd_help();
-    } else if (strcmp(cmd, "info") == 0) {
-        do_cmd_info();
-    } else if (strcmp(cmd, "kmalloc") == 0) {
-        do_cmd_kmalloc();
-    } else if (strcmp(cmd, "ls") == 0) {
-        do_cmd_ls(argvs);
-    } else if (strcmp(cmd, "setTimeout") == 0) {
-        char* sec = str_SepbySpace(argvs);
-        do_cmd_setTimeout(argvs, sec);
-    } else if (strcmp(cmd, "set2sAlert") == 0) {
-        do_cmd_set2sAlert();
-    } else if (strcmp(cmd, "reboot") == 0) {
-        do_cmd_reboot();
+    char* cmd       = words[0];
+    char* argvs[2]  = {words[1], words[2]};
+    // argvs[0] = words[1];
+    // argvs[1] = words[2];
+
+    for (int i = 0; i < cmd_list_size; i++)
+    {
+        if (strcmp(cmd, cmd_list[i].command) == 0)
+        {
+            cmd_list[i].func(argvs, argc);
+            return;            
+        }
+    }
+    if (*cmd != '\0')
+    {
+        uart_puts(cmd);
+        uart_puts(": command not found\r\n");
     }
 }
 
@@ -92,8 +141,9 @@ void cli_print_banner()
     uart_puts("=======================================\r\n");
 }
 
-void do_cmd_cat(char* filepath)
+DO_CMD_FUNC(do_cmd_cat)
 {
+    char* filepath = argv[0];
     char* c_filepath;
     char* c_filedata;
     unsigned int c_filesize;
@@ -118,26 +168,32 @@ void do_cmd_cat(char* filepath)
         //if this is TRAILER!!! (last of file)
         if(header_ptr==0) uart_puts("cat: %s: No such file or directory\n", filepath);
     }
+
+    return 0;
 }
 
-void do_cmd_dtb()
+DO_CMD_FUNC(do_cmd_dtb)
 {
     traverse_device_tree(dtb_ptr, dtb_callback_show_tree);
+    return 0;
 }
 
-void do_cmd_help()
+DO_CMD_FUNC(do_cmd_help)
 {
-    for(int i = 0; i < CLI_MAX_CMD; i++)
+    for(int i = 0; i < cmd_list_size; i++)
     {
         uart_puts(cmd_list[i].command);
-        uart_puts("\t\t\t: ");
+        uart_puts("\t\t\t\t: ");
         uart_puts(cmd_list[i].help);
         uart_puts("\r\n");
     }
+
+    return 0;
 }
 
-void do_cmd_exec(char* filepath)
+DO_CMD_FUNC(do_cmd_exec)
 {
+    char* filepath = argv[0];
     char* c_filepath;
     char* c_filedata;
     unsigned int c_filesize;
@@ -162,7 +218,7 @@ void do_cmd_exec(char* filepath)
                 "msr sp_el0, %1\n\t"    // user program stack pointer set to new stack.
                 "eret\n\t"              // Perform exception return. EL1 -> EL0
                 :: "r" (c_filedata),
-                   "r" (ustack+USTACK_SIZE));
+                   "r" (ustack + USTACK_SIZE));
             free(ustack);
             break;
         }
@@ -170,15 +226,16 @@ void do_cmd_exec(char* filepath)
         //if this is TRAILER!!! (last of file)
         if(header_ptr==0) uart_puts("cat: %s: No such file or directory\n", filepath);
     }
-
+    return 0;
 }
 
-void do_cmd_hello()
+DO_CMD_FUNC(do_cmd_hello)
 {
     uart_puts("Hello World!\r\n");
+    return 0;
 }
 
-void do_cmd_info()
+DO_CMD_FUNC(do_cmd_info)
 {
     // print hw revision
     pt[0] = 8 * 4;
@@ -214,9 +271,11 @@ void do_cmd_info()
         uart_2hex(pt[6]);
         uart_puts("\r\n");
     }
+
+    return 0;
 }
 
-void do_cmd_kmalloc()
+DO_CMD_FUNC(do_cmd_kmalloc)
 {
     //test malloc
     char* test1 = kmalloc(0x18);
@@ -230,9 +289,10 @@ void do_cmd_kmalloc()
     char* test3 = kmalloc(0x28);
     memcpy(test3,"test malloc3",sizeof("test malloc3"));
     uart_puts("%s\n",test3);
+    return 0;
 }
 
-void do_cmd_ls(char* workdir)
+DO_CMD_FUNC(do_cmd_ls)
 {
     char* c_filepath;
     char* c_filedata;
@@ -252,24 +312,50 @@ void do_cmd_ls(char* workdir)
         //if this is not TRAILER!!! (last of file)
         if(header_ptr!=0) uart_puts("%s\n", c_filepath);
     }
+
+    return 0;
 }
 
-void do_cmd_setTimeout(char* msg, char* sec)
+DO_CMD_FUNC(do_cmd_setTimeout)
 {
+    char* msg = argv[0];
+    char* sec = argv[1];
+
+    if (msg == NULL || sec == NULL)
+    {
+        uart_puts("Usage: setTimeout [MESSAGE] [SECONDS]\r\n");
+        return 0;
+    }
     add_timer(uart_sendline,atoi(sec),msg);
+    return 0;
 }
 
-void do_cmd_set2sAlert()
+DO_CMD_FUNC(do_cmd_set2sAlert)
 {
     add_timer(timer_set2sAlert,2,"2sAlert");
+    return 0;
 }
 
-void do_cmd_reboot()
+DO_CMD_FUNC(do_cmd_reboot)
 {
     uart_puts("Reboot in 5 seconds ...\r\n\r\n");
     volatile unsigned int* rst_addr = (unsigned int*)PM_RSTC;
     *rst_addr = PM_PASSWORD | 0x20;
+
+    unsigned long long expired_tick = 10 * 10000;
+
     volatile unsigned int* wdg_addr = (unsigned int*)PM_WDOG;
-    *wdg_addr = PM_PASSWORD | 5;
+    *wdg_addr = (unsigned long long)PM_PASSWORD | expired_tick;
+    return 0;
+}
+
+DO_CMD_FUNC(do_cmd_cancel_reboot)
+{
+    uart_puts("Cancel Reboot \r\n\r\n");
+    volatile unsigned int* rst_addr = (unsigned int*)PM_RSTC;
+    *rst_addr = PM_PASSWORD | 0x0;
+    volatile unsigned int* wdg_addr = (unsigned int*)PM_WDOG;
+    *wdg_addr = PM_PASSWORD | 0;
+    return 0;
 }
 

@@ -112,7 +112,6 @@ void set_core_timer_interrupt(unsigned long long expired_time){
         "mrs x1, cntfrq_el0\n\t"    // cntfrq_el0 -> frequency of the timer
         "mul x1, x1, %0\n\t"        // cntpct_el0 = cntfrq_el0 * seconds: relative timer to cntfrq_el0
         "msr cntp_tval_el0, x1\n\t" // Set expired time to cntp_tval_el0, which stores time value of EL1 physical timer.
-    // :"=r" (expired_time));
     :
     :"r" (expired_time));
 }

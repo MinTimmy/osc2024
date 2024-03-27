@@ -2,28 +2,17 @@
 #include "uart1.h"
 #include "mbox.h"
 #include "power.h"
+#include "u_string.h"
 
 struct CLI_CMDS cmd_list[CLI_MAX_CMD]=
 {
     {.command="hello", .help="print Hello World!"},
     {.command="help", .help="print all available commands"},
     {.command="info", .help="get device information via mailbox"},
-    {.command="reboot", .help="reboot the device"}
+    {.command="reboot", .help="reboot the device"},
+    {.command="c", .help="cancel reboot the device"}
 };
 
-int cli_cmd_strcmp(const char* p1, const char* p2)
-{
-    const unsigned char *s1 = (const unsigned char*) p1;
-    const unsigned char *s2 = (const unsigned char*) p2;
-    unsigned char c1, c2;
-
-    do {
-        c1 = (unsigned char) *s1++;
-        c2 = (unsigned char) *s2++;
-        if ( c1 == '\0' ) return c1 - c2;
-    } while ( c1 == c2 );
-    return c1 - c2;
-}
 
 void cli_cmd_clear(char* buffer, int length)
 {
@@ -50,6 +39,39 @@ void cli_cmd_read(char* buffer)
             break;
         }
 
+        // if user key 'backspace'
+        if ( c == '\b' || c == 127 )
+        {
+            if ( idx > 0 )
+            {
+                uart_puts("\b \b");
+                idx--;
+                buffer[idx] = '\0';
+            }
+            continue;
+        }
+
+        // use tab to auto complete
+        if ( c == '\t' )
+        {
+            for(int tab_index = 0; tab_index < CLI_MAX_CMD; tab_index++)
+            {
+                if (strncmp(buffer, cmd_list[tab_index].command, strlen(buffer)) == 0)
+                {
+                    for (int j = 0; j < strlen(buffer); j++)
+                    {
+                        uart_puts("\b \b");
+                    }
+                    uart_puts(cmd_list[tab_index].command);
+                    cli_cmd_clear(buffer, strlen(buffer) + 3);
+                    strcpy(buffer, cmd_list[tab_index].command);
+                    break;
+                }
+            }
+            continue;
+        }
+
+
         // some ascii blacklist
         if ( c > 16 && c < 32 ) continue;
         if ( c > 127 ) continue;
@@ -61,14 +83,16 @@ void cli_cmd_read(char* buffer)
 
 void cli_cmd_exec(char* buffer)
 {
-    if (cli_cmd_strcmp(buffer, "hello") == 0) {
+    if (strcmp(buffer, "hello") == 0) {
         do_cmd_hello();
-    } else if (cli_cmd_strcmp(buffer, "help") == 0) {
+    } else if (strcmp(buffer, "help") == 0) {
         do_cmd_help();
-    } else if (cli_cmd_strcmp(buffer, "info") == 0) {
+    } else if (strcmp(buffer, "info") == 0) {
         do_cmd_info();
-    } else if (cli_cmd_strcmp(buffer, "reboot") == 0) {
+    } else if (strcmp(buffer, "reboot") == 0) {
         do_cmd_reboot();
+    } else if (strcmp(buffer, "c") == 0) {
+        do_cmd_cancel_reboot();
     } else if (*buffer){
         uart_puts(buffer);
         uart_puts(": command not found\r\n");
@@ -77,6 +101,7 @@ void cli_cmd_exec(char* buffer)
 
 void cli_print_banner()
 {
+    uart_puts("\r\n");
     uart_puts("=======================================\r\n");
     uart_puts("  OSC 2024 Shell Lab1                  \r\n");
     uart_puts("=======================================\r\n");
@@ -141,7 +166,18 @@ void do_cmd_reboot()
     uart_puts("Reboot in 5 seconds ...\r\n\r\n");
     volatile unsigned int* rst_addr = (unsigned int*)PM_RSTC;
     *rst_addr = PM_PASSWORD | 0x20;
+
+    unsigned long long expired_tick = 10 * 10000;
+
     volatile unsigned int* wdg_addr = (unsigned int*)PM_WDOG;
-    *wdg_addr = PM_PASSWORD | 5;
+    *wdg_addr = (unsigned long long)PM_PASSWORD | expired_tick;
 }
 
+void do_cmd_cancel_reboot()
+{
+    uart_puts("Cancel Reboot \r\n\r\n");
+    volatile unsigned int* rst_addr = (unsigned int*)PM_RSTC;
+    *rst_addr = PM_PASSWORD | 0x0;
+    volatile unsigned int* wdg_addr = (unsigned int*)PM_WDOG;
+    *wdg_addr = PM_PASSWORD | 0;
+}
